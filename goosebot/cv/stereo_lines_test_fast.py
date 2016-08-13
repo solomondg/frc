@@ -104,62 +104,94 @@ class WebcamVideoStream:
 
 
 # lcam, rcam = VideoCapture(1), VideoCapture(2)
-lcam, rcam = WebcamVideoStream(src=1).start(), WebcamVideoStream(src=2).start()
+lcam, rcam = WebcamVideoStream(src=0).start(), WebcamVideoStream(src=1).start()
 
 while True:
+    finish = True
 
+    print ("1")
     sift = cv2.xfeatures2d.SIFT_create()
 
+    print ("2")
     lframe, rframe = lcam.read(), rcam.read()
     lframe, rframe = imutils.resize(lframe, width=400), imutils.resize(rframe, width=400)
+    print ("3")
 
     cv2.imshow('left', lframe)
     cv2.imshow('right', rframe)
+    print ("4")
 
     kpl, desl = sift.detectAndCompute(lframe, None)
     kpr, desr = sift.detectAndCompute(rframe, None)
+    print ("5")
 
     FLANN_INDEX_KDTREE = 0
     index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
     search_params = dict(checks=50)
+    print ("6")
 
     flann = cv2.FlannBasedMatcher(index_params, search_params)
-    matches = flann.knnMatch(desl, desr, k=2)
+    try:
+        matches = flann.knnMatch(desl, desr, k=2)
+    except cv2.error:
+        finish = False
+    print ("7")
 
-    good = []
-    ptsl = []
-    ptsr = []
+    if finish:
+        good = []
+        ptsl = []
+        ptsr = []
 
-    for i, (m, n) in enumerate(matches):
-        if m.distance < 0.8*n.distance:
-            good.append(m)
-            ptsl.append(kpl[m.queryIdx].pt)
-            ptsr.append(kpr[m.trainIdx].pt)
+        for i, (m, n) in enumerate(matches):
+            if m.distance < 0.8*n.distance:
+                good.append(m)
+                ptsl.append(kpl[m.queryIdx].pt)
+                ptsr.append(kpr[m.trainIdx].pt)
+        print ("8")
 
-    ptsl, ptsr = np.int32(ptsl), np.int32(ptsr)
+        ptsl, ptsr = np.int32(ptsl), np.int32(ptsr)
+        print ("9")
 
-    F, mask = cv2.findFundamentalMat(ptsl, ptsr, cv2.FM_LMEDS)
+    if finish:
+        try:
+            F, mask = cv2.findFundamentalMat(ptsl, ptsr, cv2.FM_LMEDS)
+        except cv2.error:
+            finish = False
+        print ("10")
 
-    ptsl = ptsl[mask.ravel() == 1]
-    ptsr = ptsr[mask.ravel() == 1]
-    ptsrLines = ptsr.reshape(-1, 1, 2)
-    ptslLines = ptsl.reshape(-1, 1, 2)
+    if finish:
+        try:
+            ptsl = ptsl[mask.ravel() == 1]
+            ptsr = ptsr[mask.ravel() == 1]
+            ptsrLines = ptsr.reshape(-1, 1, 2)
+            ptslLines = ptsl.reshape(-1, 1, 2)
+        except AttributeError:
+            finish = False
+    print ("11")
 
+    if finish:
+        try:
+            linesl = cv2.computeCorrespondEpilines(ptslLines, 2, F)
+        except cv2.error:
+            finish = False
+    if finish:
+        linesl = linesl.reshape(-1, 3)
+        img5, img6 = drawlines(lframe, rframe, linesl, ptsl, ptsr)
+        print ("12")
 
-    linesl = cv2.computeCorrespondEpilines(ptslLines, 2, F)
-    linesl = linesl.reshape(-1, 3)
-    img5, img6 = drawlines(lframe, rframe, linesl, ptsl, ptsr)
+        linesr = cv2.computeCorrespondEpilines(ptsrLines, 2, F)
+        linesr = linesl.reshape(-1, 3)
+        img3, img4 = drawlines(rframe, lframe, linesr, ptsr, ptsl)
+        print ("13")
 
-    linesr = cv2.computeCorrespondEpilines(ptsrLines, 2, F)
-    linesr = linesl.reshape(-1, 3)
-    img3, img4 = drawlines(rframe, lframe, linesr, ptsr, ptsl)
+        cv2.imshow('left', img5)
+        print ("14")
+        cv2.imshow('right', img3)
+        print ("15")
 
-    cv2.imshow('left', img5)
-    cv2.imshow('right', img3)
-
-
-    if cv2.waitKey(0) & 0xFF == ord('q'):
+    if cv2.waitKey(20) & 0xFF == ord('q'):
         break
+    print ("16")
 
 cv2.destroyAllWindows()
 lcam.stop()
