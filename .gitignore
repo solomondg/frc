@@ -89,3 +89,6 @@ ENV/
 .ropeproject
 *.png
 *.jpg
+*.mat
+*.sift
+*.JPG
