@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import wpilib
-from wpilib import IterativeRobot, CANTalon, command
+from wpilib import IterativeRobot, CANTalon
+from wpilib.command import Command
 from subsystems.drive import Drive
 from commands.teleop import TeleOp
-import oi
+from commands.teleopdrive import TeleOpDrive
+from oi import OI
 
 
 class MyRobot(IterativeRobot):
@@ -14,7 +16,10 @@ class MyRobot(IterativeRobot):
         This function is called upon program startup and
         should be used for any initialization code.
         """
-        pass
+        self.oi = OI(self)
+        self.drive = Drive(self)
+        self.teleop = TeleOp(self)
+        # self.teleop.start()
 
     def autonomousPeriodic(self):
         """This function is called periodically during autonomous."""
@@ -26,6 +31,7 @@ class MyRobot(IterativeRobot):
 
     def testPeriodic(self):
         """This function is called periodically during test mode."""
+        pass
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)

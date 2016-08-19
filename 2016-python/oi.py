@@ -1,8 +1,7 @@
 import wpilib
+from wpilib.joystick import Joystick
 from wpilib import buttons
-from wpilib import joystick
-from commands.teleop import TeleOp
-from Math import abs
+from math import fabs as abs
 
 
 class OI:
@@ -10,8 +9,7 @@ class OI:
     def __init__(self, robot):
         self.robot = robot
 
-        self.gamepad1 = joystick(0)
-        self.gamepad2 = joystick(1)
+        self.gamepad1 = Joystick(0)
 
         self.deadzoneThreshold = 0.35
 

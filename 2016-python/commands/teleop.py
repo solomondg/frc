@@ -1,8 +1,8 @@
 import wpilib
 from wpilib.command import Command
 
-from oi import OI
 from subsystems.drive import Drive
+from commands.teleopdrive import TeleOpDrive
 
 class TeleOp(Command):
 
@@ -10,16 +10,16 @@ class TeleOp(Command):
         super().__init__(name, timeout)
 
         self.requires(robot.drive)
-        self.robot = robot(self)
+#         self.robot = robot(self)
 
         self.drive = Drive(self)
 
-        self.oi = OI(self)
-
         self.speed = 0.95
+        self.tOp = TeleOpDrive(self)
 
     def initialize(self):
         self.drive.setDefault()
+        self.tOp.start()
         pass
 
     def execute(self):
@@ -29,8 +29,7 @@ class TeleOp(Command):
         return False
 
     def end(self):
-        pass
+        self.drive.resetDefault()
 
     def interrupted(self):
-        pass
-
+        self.end()
