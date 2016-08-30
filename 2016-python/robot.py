@@ -3,7 +3,7 @@
 import wpilib
 from wpilib import IterativeRobot, CANTalon
 from wpilib.command import Command
-from subsystems.drive import Drive
+from subsystems.drive import Drive2
 from commands.teleop import TeleOp
 from commands.teleopdrive import TeleOpDrive
 from oi import OI
@@ -17,9 +17,9 @@ class MyRobot(IterativeRobot):
         should be used for any initialization code.
         """
         self.oi = OI(self)
-        self.drive = Drive(self)
+        self.drive = Drive2(self)
         self.teleop = TeleOp(self)
-        # self.teleop.start()
+        self.teleop.start()
 
     def autonomousPeriodic(self):
         """This function is called periodically during autonomous."""

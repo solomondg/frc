@@ -3,7 +3,7 @@ from wpilib import smartdashboard
 from wpilib.command import Command
 
 from oi import OI
-from subsystems.drive import Drive
+from subsystems.drive import Drive2
 
 
 class TeleOpDrive(Command):

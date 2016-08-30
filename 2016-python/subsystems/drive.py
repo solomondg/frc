@@ -4,12 +4,14 @@ from wpilib import cantalon, robotdrive
 # from commands.teleopdrive import TeleOpDrive
 
 
-class Drive(Subsystem):
+class Drive2(Subsystem):
 
     def __init__(self, robot, name=None):
         super().__init__(name=name)
         self.robot = robot
         self.lmotors, self.rmotors = [], []
+
+
         self.lmotors.append(wpilib.CANTalon(1))
         self.lmotors.append(wpilib.CANTalon(2))
         self.rmotors.append(wpilib.CANTalon(3))
@@ -71,7 +73,8 @@ class Drive(Subsystem):
         pass
 
     def setDefault(self):
-        self.setDefaultCommand(TeleOpDrive())
+        # self.setDefaultCommand(TeleOpDrive())
+        pass
 
     def resetDefault(self):
         self.setDefaultCommand(None)

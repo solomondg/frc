@@ -1,0 +1,66 @@
+{
+    "analog": {
+        "position": {
+            "order": 0,
+            "set": false,
+            "x": 0,
+            "y": 0
+        }
+    },
+    "can": {
+        "position": {
+            "order": 3,
+            "set": false,
+            "x": 0,
+            "y": 0
+        }
+    },
+    "control": {
+        "position": {
+            "order": 5,
+            "set": false,
+            "x": 0,
+            "y": 0
+        }
+    },
+    "data-tree": {
+        "position": {
+            "order": 6,
+            "set": false,
+            "x": 0,
+            "y": 0
+        }
+    },
+    "digital": {
+        "position": {
+            "order": 1,
+            "set": false,
+            "x": 0,
+            "y": 0
+        }
+    },
+    "field": {
+        "position": {
+            "order": 7,
+            "set": false,
+            "x": 0,
+            "y": 0
+        }
+    },
+    "joysticks": {
+        "position": {
+            "order": 4,
+            "set": false,
+            "x": 0,
+            "y": 0
+        }
+    },
+    "solenoid": {
+        "position": {
+            "order": 2,
+            "set": false,
+            "x": 0,
+            "y": 0
+        }
+    }
+}

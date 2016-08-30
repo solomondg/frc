@@ -1,7 +1,7 @@
 import wpilib
 from wpilib.command import Command
 
-from subsystems.drive import Drive
+from subsystems.drive import Drive2
 from commands.teleopdrive import TeleOpDrive
 
 class TeleOp(Command):
@@ -12,7 +12,7 @@ class TeleOp(Command):
         self.requires(robot.drive)
 #         self.robot = robot(self)
 
-        self.drive = Drive(self)
+        self.drive = Drive2(self)
 
         self.speed = 0.95
         self.tOp = TeleOpDrive(self)
